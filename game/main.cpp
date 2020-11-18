@@ -27,6 +27,22 @@ int main()
                 y = stoi(scndint);          //stoi is converting onli to string!!!
                 net [x][y] = true;
             }
+            for (x=0;x<rows;x++)
+            {
+                for (y=0;y<cols;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+                {
+                    if (net[x][y])
+                    {
+                        cout << "O";
+                    }
+                    else
+                    {
+                        cout << "X";
+                    }
+                    
+                }
+                cout << endl;
+            }
         }
         else
         {
