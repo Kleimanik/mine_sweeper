@@ -50,7 +50,7 @@ int main()
             {
                 for (y=0;y<cols;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
                 {
-                    if (net[x][y]==9)
+                    if (net[x][y]>=9)
                     {
                         if (x>0;x<rows-1)
                         {
@@ -146,8 +146,62 @@ int main()
                 }
             }
 
+            bool visnet[rows][cols];
+            for (x=0;x<rows;x++)
+            {
+                for (y=0;y<cols;y++)        //this cycle is to reset all variable in array visnet to false
+                {
+                    visnet[x][y] = false; 
+                }
+            }
 
-             for (x=0;x<rows;x++)
+            for (x=0;x<rows;x++)
+            {
+                for (y=0;y<cols;y++)        //
+                {
+                    if (visnet[x][y]==false)
+                    {
+                        cout << "X ";
+                    }
+                    else
+                    {
+                        cout << "O ";
+                    }
+                     
+                }
+                cout << endl;
+            }
+
+            bool expl=true;
+            while (expl)
+            {
+                cout << "Zadaj suradnice pola ktore chces vybrat: ";
+                int vx,vy;
+                cin >> vx >> vy;
+                visnet [vx] [vy] = true;
+                for (x=0;x<rows;x++)        // ine premenne
+                {
+                    for (y=0;y<cols;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+                    {
+                        if (visnet[x][y]==false)
+                        {
+                            cout << "X ";
+                        }
+                        else
+                        {
+                            cout << net[x][y] << " ";
+                            if (net[x][y]>=9)
+                            {
+                                expl=false;
+                            }
+                        }
+                    }
+                    cout << endl;
+                }
+            }
+            cout << "Vybuchol si, skus svoje stastie nabuduce." << endl;
+
+            for (x=0;x<rows;x++)
             {
                 for (y=0;y<cols;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
                 {
