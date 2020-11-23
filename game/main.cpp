@@ -24,7 +24,7 @@ int main()
                 getline(ss,frstint,' ');        //reading stream `ss` until hits ` ` (the 3rd atribute in bar)
                 getline(ss,scndint,' ');    
                 x = stoi(frstint);          //stoi is coverting string variable to integer
-                y = stoi(scndint);          //stoi is converting onli to string!!!
+                y = stoi(scndint);          //stoi is converting only to string!!!
                 net [x][y] = 9;
             }
 
