@@ -2,7 +2,118 @@
 #include<string>    // -//- for type of variable string
 #include<fstream>   // -//- for commands ifstream(r14.)/ofstream and for work with stream
 #include<sstream>   // -//- for command stringstream r20.
+#include<queue>
 using namespace std;    //std is for commands cin/cout here i declaret to use it every time or if I do`t, I can use it separate in program
+
+struct Point
+{
+    int x,y;
+};
+
+
+/*
+int** set_up_net ( int **net, int r , int c)
+{
+for (int x=0;x<r;x++)
+{
+    for (int y=0;y<c;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
+    {
+        if (net[x][y]>=9)
+        {
+            if (x>0 && x<r-1)
+            {
+                if (y>0 && y<c-1)
+                {
+                    net[x+1][y]++;
+                    net[x+1][y+1]++;
+                    net[x+1][y-1]++;
+                    net[x-1][y]++;
+                    net[x-1][y+1]++;
+                    net[x-1][y-1]++;
+                    net[x][y+1]++;
+                    net[x][y-1]++;
+                }
+                else
+                {
+                    if (y==0)
+                    {
+                        net[x+1][y]++;
+                        net[x+1][y+1]++;
+                        net[x-1][y]++;
+                        net[x-1][y+1]++;
+                        net[x][y+1]++;
+                    }
+                    else
+                    {
+                        net[x+1][y]++;
+                        net[x+1][y-1]++;
+                        net[x-1][y]++;
+                        net[x-1][y-1]++;
+                        net[x][y-1]++;
+                    }    
+                }    
+            }
+            else
+            {
+                if (x==0)
+                {
+                    if (y>0 && y<c-1)
+                    {
+                        net[x][y+1]++;
+                        net[x][y-1]++;
+                        net[x+1][y+1]++;
+                        net[x+1][y-1]++;
+                        net[x+1][y]++;
+                    }
+                    else
+                    {
+                        if (y==0)
+                        {
+                            net[x+1][y]++;
+                            net[x+1][y+1]++;
+                            net[x][y+1]++;
+                        }
+                        else
+                        {
+                            net[x+1][y]++;
+                            net[x+1][y-1]++;
+                            net[x][y-1]++;                                        
+                        }
+                    }
+                }
+                else
+                {
+                    if (y>0 && y<c-1)
+                    {
+                        net[x][y+1]++;
+                        net[x][y-1]++;
+                        net[x-1][y+1]++;
+                        net[x-1][y-1]++;
+                        net[x-1][y]++;
+                    }
+                    else
+                    {
+                        if (y==0)
+                        {
+                            net[x-1][y]++;
+                            net[x-1][y+1]++;
+                            net[x][y+1]++;
+                        }
+                        else
+                        {
+                            net[x-1][y]++;
+                            net[x-1][y-1]++;
+                            net[x][y-1]++;                                        
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+cout << "hatata patata";
+return net;
+}*/
 
 int main()
 {
@@ -46,8 +157,17 @@ int main()
             }                
         }
         cout << endl;
+    }
+
+/*    int** newnet;
+    newnet = set_up_net((int**)&net[0][0] , rows , cols );
+    for (x=0;x<rows;x++)
+    {
+        for (y=0;y<cols;y++)
+        {
+            net[x][y] = newnet[x][y];
         }
-/*        net = set_up_net( net , rows , cols );*/
+    }*/
 
     for (x=0;x<rows;x++)
     {
@@ -55,9 +175,9 @@ int main()
         {
             if (net[x][y]>=9)
             {
-                if (x>0;x<rows-1)
+                if (x>0 && x<rows-1)
                 {
-                    if (y>0;y<cols-1)
+                    if (y>0 && y<cols-1)
                     {
                         net[x+1][y]++;
                         net[x+1][y+1]++;
@@ -92,7 +212,7 @@ int main()
                 {
                     if (x==0)
                     {
-                        if (y>0;y<cols-1)
+                        if (y>0 && y<cols-1)
                         {
                             net[x][y+1]++;
                             net[x][y-1]++;
@@ -118,7 +238,7 @@ int main()
                     }
                     else
                     {
-                        if (y>0;y<cols-1)
+                        if (y>0 && y<cols-1)
                         {
                             net[x][y+1]++;
                             net[x][y-1]++;
@@ -179,6 +299,396 @@ int main()
         int vx,vy;
         cin >> vx >> vy;
         visnet [vx] [vy] = true;
+
+        if (net[vx][vy]==0)
+        {
+            queue<Point>waweq;
+            struct Point p;
+            p.x = vx;
+            p.y = vy;
+            waweq.push(p);
+            bool beach;
+            while(beach)
+            {
+                p = waweq.front();
+                waweq.pop();
+                p.x = x;
+                p.y = y;
+
+                if (x>0 && x<rows-1)
+                {
+                    if (y>0 && y<cols-1)
+                    {
+                        if (net[x-1][y-1]==0)
+                        {
+                            p.x = x-1;
+                            p.y = y-1;
+                            waweq.push(p);
+                        }
+                        visnet[x-1][y-1] = true;
+
+                        if (net[x][y-1]==0)
+                        {
+                            p.x = x;
+                            p.y = y-1;
+                            waweq.push(p);
+                        }
+                        visnet[x][y-1] = true;
+
+                        if (net[x+1][y-1]==0)
+                        {
+                            p.x = x+1;
+                            p.y = y-1;
+                            waweq.push(p);
+                        }
+                        visnet[x+1][y-1] = true;
+
+                        if (net[x-1][y]==0)
+                        {
+                            p.x = x-1;
+                            p.y = y;
+                            waweq.push(p);
+                        }
+                        visnet[x-1][y] = true;
+
+                        if (net[x+1][y]==0)
+                        {
+                            p.x = x+1;
+                            p.y = y;
+                            waweq.push(p);
+                        }
+                        visnet[x+1][y] = true;
+
+                        if (net[x-1][y+1]==0)
+                        {
+                            p.x = x-1;
+                            p.y = y+1;
+                            waweq.push(p);
+                        }
+                        visnet[x-1][y+1] = true;
+
+                        if (net[x][y+1]==0)
+                        {
+                            p.x = x;
+                            p.y = y+1;
+                            waweq.push(p);
+                        }
+                        visnet[x][y+1] = true;
+
+                        if (net[x+1][y+1]==0)
+                        {
+                            p.x = x+1;
+                            p.y = y+1;
+                            waweq.push(p);
+                        }
+                        visnet[x+1][y+1] = true;
+                    }
+                    else
+                    {
+                        if (y==0)
+                        {
+                          if (net[x-1][y]==0)
+                            {
+                                p.x = x-1;
+                                p.y = y;
+                                waweq.push(p);
+                            }
+                            visnet[x-1][y] = true;
+
+                            if (net[x+1][y]==0)
+                            {
+                                p.x = x+1;
+                                p.y = y;
+                                waweq.push(p);
+                            }
+                            visnet[x+1][y] = true;
+
+                            if (net[x-1][y+1]==0)
+                            {
+                                p.x = x-1;
+                                p.y = y+1;
+                                waweq.push(p);
+                            }
+                            visnet[x-1][y+1] = true;
+
+                            if (net[x][y+1]==0)
+                            {
+                                p.x = x;
+                                p.y = y+1;
+                                waweq.push(p);
+                            }
+                            visnet[x][y+1] = true;
+
+                            if (net[x+1][y+1]==0)
+                            {
+                                p.x = x+1;
+                                p.y = y+1;
+                                waweq.push(p);
+                            }
+                            visnet[x+1][y+1] = true;
+                        }
+                        else
+                        {
+                            if (net[x-1][y-1]==0)
+                            {
+                                p.x = x-1;
+                                p.y = y-1;
+                                waweq.push(p);
+                            }
+                            visnet[x-1][y-1] = true;
+
+                            if (net[x][y-1]==0)
+                            {
+                                p.x = x;
+                                p.y = y-1;
+                                waweq.push(p);
+                            }
+                            visnet[x][y-1] = true;
+
+                            if (net[x+1][y-1]==0)
+                            {
+                                p.x = x+1;
+                                p.y = y-1;
+                                waweq.push(p);
+                            }
+                            visnet[x+1][y-1] = true;
+
+                            if (net[x-1][y]==0)
+                            {
+                                p.x = x-1;
+                                p.y = y;
+                                waweq.push(p);
+                            }
+                            visnet[x-1][y] = true;
+
+                            if (net[x+1][y]==0)
+                            {
+                                p.x = x+1;
+                                p.y = y;
+                                waweq.push(p);
+                            }
+                            visnet[x+1][y] = true;
+                        }
+                    }    
+                }
+                else
+                {
+                    if (x==0)
+                    {
+                        if (y>0 && y<cols-1)
+                        {
+
+                            if (net[x][y-1]==0)
+                            {
+                                p.x = x;
+                                p.y = y-1;
+                                waweq.push(p);
+                            }
+                            visnet[x][y-1] = true;
+
+                            if (net[x+1][y-1]==0)
+                            {
+                                p.x = x+1;
+                                p.y = y-1;
+                                waweq.push(p);
+                            }
+                            visnet[x+1][y-1] = true;
+
+                            if (net[x+1][y]==0)
+                            {
+                                p.x = x+1;
+                                p.y = y;
+                                waweq.push(p);
+                            }
+                            visnet[x+1][y] = true;
+
+                            if (net[x][y+1]==0)
+                            {
+                                p.x = x;
+                                p.y = y+1;
+                                waweq.push(p);
+                            }
+                            visnet[x][y+1] = true;
+
+                            if (net[x+1][y+1]==0)
+                            {
+                                p.x = x+1;
+                                p.y = y+1;
+                                waweq.push(p);
+                            }
+                            visnet[x+1][y+1] = true;
+                        }
+                        else
+                        {
+                            if (y==0)
+                            {
+
+                                if (net[x+1][y]==0)
+                                {
+                                    p.x = x+1;
+                                    p.y = y;
+                                    waweq.push(p);
+                                }
+                                visnet[x+1][y] = true;
+
+                                if (net[x][y+1]==0)
+                                {
+                                    p.x = x;
+                                    p.y = y+1;
+                                    waweq.push(p);
+                                }
+                                visnet[x][y+1] = true;
+
+                                if (net[x+1][y+1]==0)
+                                {
+                                    p.x = x+1;
+                                    p.y = y+1;
+                                    waweq.push(p);
+                                }
+                                visnet[x+1][y+1] = true;
+                            }
+                            else
+                            {
+
+                                if (net[x][y-1]==0)
+                                {
+                                    p.x = x;
+                                    p.y = y-1;
+                                    waweq.push(p);
+                                }
+                                visnet[x][y-1] = true;
+
+                                if (net[x+1][y-1]==0)
+                                {
+                                    p.x = x+1;
+                                    p.y = y-1;
+                                    waweq.push(p);
+                                }
+                                visnet[x+1][y-1] = true;
+
+                                if (net[x+1][y]==0)
+                                {
+                                    p.x = x+1;
+                                    p.y = y;
+                                    waweq.push(p);
+                                }
+                                visnet[x+1][y] = true;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (y>0 && y<cols-1)
+                        {
+                			if (net[x-1][y-1]==0)
+                            {
+                                p.x = x-1;
+                                p.y = y-1;
+                                waweq.push(p);
+                            }
+                            visnet[x-1][y-1] = true;
+
+                            if (net[x][y-1]==0)
+                            {
+                                p.x = x;
+                                p.y = y-1;
+                                waweq.push(p);
+                            }
+                            visnet[x][y-1] = true;
+
+                            if (net[x-1][y]==0)
+                            {
+                                p.x = x-1;
+                                p.y = y;
+                                waweq.push(p);
+                            }
+                            visnet[x-1][y] = true;
+
+                            if (net[x-1][y+1]==0)
+                            {
+                                p.x = x-1;
+                                p.y = y+1;
+                                waweq.push(p);
+                            }
+                            visnet[x-1][y+1] = true;
+
+                            if (net[x][y+1]==0)
+                            {
+                                p.x = x;
+                                p.y = y+1;
+                                waweq.push(p);
+                            }
+                            visnet[x][y+1] = true;
+
+                        }
+                        else
+                        {
+                            if (y==0)
+                            {
+
+                                if (net[x-1][y]==0)
+                                {
+                                    p.x = x-1;
+                                    p.y = y;
+                                    waweq.push(p);
+                                }
+                                visnet[x-1][y] = true;
+
+                                if (net[x-1][y+1]==0)
+                                {
+                                    p.x = x-1;
+                                    p.y = y+1;
+                                    waweq.push(p);
+                                }
+                                visnet[x-1][y+1] = true;
+
+                                if (net[x][y+1]==0)
+                                {
+                                    p.x = x;
+                                    p.y = y+1;
+                                    waweq.push(p);
+                                }
+                                visnet[x][y+1] = true;
+                            }
+                            else
+                            {
+                    			if (net[x-1][y-1]==0)
+                                {
+                                    p.x = x-1;
+                                    p.y = y-1;
+                                    waweq.push(p);
+                                }
+                                visnet[x-1][y-1] = true;
+
+                                if (net[x][y-1]==0)
+                                {
+                                    p.x = x;
+                                    p.y = y-1;
+                                    waweq.push(p);
+                                }
+                                visnet[x][y-1] = true;
+
+                                if (net[x-1][y]==0)
+                                {
+                                    p.x = x-1;
+                                    p.y = y;
+                                    waweq.push(p);
+                                }
+                                visnet[x-1][y] = true;
+
+                            }
+                        }    
+                    }
+                }
+
+                if(!waweq.empty())
+                {
+                    beach=false;
+                }
+            }
+        }
+
         for (x=0;x<rows;x++)        // ine premenne
         {
             for (y=0;y<cols;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
@@ -198,6 +708,8 @@ int main()
             }
             cout << endl;
         }
+
+
     }
     cout << "Vybuchol si, skus svoje stastie nabuduce." << endl;
 
@@ -212,107 +724,6 @@ int main()
     return 0;       //return to int main number 0
 }
 
-/*
-int* set_up_net ( int net[9][9] , int r , int c)
-{
-int x,y;
-for (x=0;x<r;x++)
-{
-    for (y=0;y<c;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
-    {
-        if (net[x][y]>=9)
-        {
-            if (x>0;x<r-1)
-            {
-                if (y>0;y<c-1)
-                {
-                    net[x+1][y]++;
-                    net[x+1][y+1]++;
-                    net[x+1][y-1]++;
-                    net[x-1][y]++;
-                    net[x-1][y+1]++;
-                    net[x-1][y-1]++;
-                    net[x][y+1]++;
-                    net[x][y-1]++;
-                }
-                else
-                {
-                    if (y==0)
-                    {
-                        net[x+1][y]++;
-                        net[x+1][y+1]++;
-                        net[x-1][y]++;
-                        net[x-1][y+1]++;
-                        net[x][y+1]++;
-                    }
-                    else
-                    {
-                        net[x+1][y]++;
-                        net[x+1][y-1]++;
-                        net[x-1][y]++;
-                        net[x-1][y-1]++;
-                        net[x][y-1]++;
-                    }    
-                }    
-            }
-            else
-            {
-                if (x==0)
-                {
-                    if (y>0;y<c-1)
-                    {
-                        net[x][y+1]++;
-                        net[x][y-1]++;
-                        net[x+1][y+1]++;
-                        net[x+1][y-1]++;
-                        net[x+1][y]++;
-                    }
-                    else
-                    {
-                        if (y==0)
-                        {
-                            net[x+1][y]++;
-                            net[x+1][y+1]++;
-                            net[x][y+1]++;
-                        }
-                        else
-                        {
-                            net[x+1][y]++;
-                            net[x+1][y-1]++;
-                            net[x][y-1]++;                                        
-                        }
-                    }
-                }
-                else
-                {
-                    if (y>0;y<c-1)
-                    {
-                        net[x][y+1]++;
-                        net[x][y-1]++;
-                        net[x-1][y+1]++;
-                        net[x-1][y-1]++;
-                        net[x-1][y]++;
-                    }
-                    else
-                    {
-                        if (y==0)
-                        {
-                            net[x-1][y]++;
-                            net[x-1][y+1]++;
-                            net[x][y+1]++;
-                        }
-                        else
-                        {
-                            net[x-1][y]++;
-                            net[x-1][y-1]++;
-                            net[x][y-1]++;                                        
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-return net;
-}
-*/
+
+
+
