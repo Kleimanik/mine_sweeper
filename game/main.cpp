@@ -1,8 +1,10 @@
-#include<iostream>  //iostream is library for command cout and cin
-#include<string>    // -//- for type of variable string
-#include<fstream>   // -//- for commands ifstream(r14.)/ofstream and for work with stream
-#include<sstream>   // -//- for command stringstream r20.
-#include<queue>
+#include <iostream>  //iostream is library for command cout and cin
+#include <string>    // -//- for type of variable string
+#include <fstream>   // -//- for commands ifstream(r14.)/ofstream and for work with stream
+#include <sstream>   // -//- for command stringstream r20.
+#include <queue>
+#include <cstdlib>
+#include <time.h>
 using namespace std;    //std is for commands cin/cout here i declaret to use it every time or if I do`t, I can use it separate in program
 
 struct Point
@@ -11,18 +13,18 @@ struct Point
 };
 
 
-/*
-int** set_up_net ( int **net, int r , int c)
+
+/*void set_up_net ( int net[][], int rows , int cols)
 {
-for (int x=0;x<r;x++)
+for (int x=0;x<rows;x++)
 {
-    for (int y=0;y<c;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
+    for (int y=0;y<cols;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
     {
         if (net[x][y]>=9)
         {
-            if (x>0 && x<r-1)
+            if (x>0 && x<rows-1)
             {
-                if (y>0 && y<c-1)
+                if (y>0 && y<cols-1)
                 {
                     net[x+1][y]++;
                     net[x+1][y+1]++;
@@ -57,7 +59,7 @@ for (int x=0;x<r;x++)
             {
                 if (x==0)
                 {
-                    if (y>0 && y<c-1)
+                    if (y>0 && y<cols-1)
                     {
                         net[x][y+1]++;
                         net[x][y-1]++;
@@ -83,7 +85,7 @@ for (int x=0;x<r;x++)
                 }
                 else
                 {
-                    if (y>0 && y<c-1)
+                    if (y>0 && y<cols-1)
                     {
                         net[x][y+1]++;
                         net[x][y-1]++;
@@ -112,18 +114,72 @@ for (int x=0;x<r;x++)
     }
 }
 cout << "hatata patata";
-return net;
 }*/
 
 int main()
 {
-    int rows = 9, cols = 9;     //declarate size of array `net`
+    int dfct = 1, rows = 9, cols = 9;     //declarate size of array `net`
+/*    while (dfct<4 && dfct>0)
+    {
+        cout << "Zadaj vysku obtiaznosti od 1 do 3: ";
+        cin >> dfct;
+        if ((dfct>3) or (dfct<1))
+        {
+            cout << "Skus to znova." << endl;
+        }
+    }
     // enum quad 
-    int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
-    string file;
-    cout << "Zadaj nazov suboru: " ;
-    cin >> file;                        //space where user set the name of text file with mines place
-    cout << file << endl;               //just for check
+*/    int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
+    string file = "mine.txt";
+/*    srand((int)time(0));
+    ofstream outfile;
+    outfile.open(file);
+    if (!outfile.is_open())
+    {
+        cout << "Error 404.";
+        return 0;
+    }*/
+    int x, y;
+/*    if (dfct==1)
+    {
+        dfct = 10;
+        rows = 9;
+        cols = 9;
+    }
+    else
+    {
+        if(dfct==2)
+        {
+            dfct = 40;
+            rows = 16;
+            cols = 16;
+        }
+        else
+        {
+            dfct = 99;
+            rows = 22;
+            cols = 22;
+        }
+    }
+    for (int i=0; i<dfct; i++)
+    {
+        x = rand() % rows;
+        outfile << x;
+        outfile << " ";
+        y = rand() % cols;
+        outfile << y;
+        outfile << endl;
+    }
+    outfile.close();
+    if (outfile.is_open())
+    {
+        cout << "Error 404.";
+        return 0;
+    }*/
+
+//    cout << "Zadaj nazov suboru: " ;
+//    cin >> file;                        //space where user set the name of text file with mines place
+//    cout << file << endl;               //just for check
     ifstream infile(file);              //ifstream declarate infile to work with file that we choose
     if (infile.is_open()==false)               //if file is open then fun the program but if not, just say Error 404.(r32)
     {
@@ -131,7 +187,6 @@ int main()
         return 0;
     }
     string fline, frstint, scndint;
-    int x, y;
     while (getline(infile,fline))       //getline is to read from file, the secon atribute is variable where getline write from file till he hits endline
     {
         stringstream ss(fline);         //converting string to stream so we can read it with getline
@@ -143,24 +198,25 @@ int main()
     }
 
 
+    bool winnet[rows][cols];
     for (x=0;x<rows;x++)
     {
         for (y=0;y<cols;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
         {
             if (net[x][y]==9)
             {
-                cout << "O";
+                winnet[x][y] = false;
             }
             else
             {
-                cout << "X";
+                winnet[x][y] = true;
             }                
         }
         cout << endl;
     }
 
-/*    int** newnet;
-    newnet = set_up_net((int**)&net[0][0] , rows , cols );
+/*    //int **newnet = &net;
+    set_up_net( net , rows , cols );
     for (x=0;x<rows;x++)
     {
         for (y=0;y<cols;y++)
@@ -173,7 +229,7 @@ int main()
     {
         for (y=0;y<cols;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
         {
-            if (net[x][y]>=9)
+            if (!winnet[x][y])
             {
                 if (x>0 && x<rows-1)
                 {
@@ -307,19 +363,18 @@ int main()
             p.x = vx;
             p.y = vy;
             waweq.push(p);
-            bool beach;
-            while(beach)
+            while(!waweq.empty())
             {
                 p = waweq.front();
                 waweq.pop();
-                p.x = x;
-                p.y = y;
+                x = p.x;
+                y = p.y;
 
                 if (x>0 && x<rows-1)
                 {
                     if (y>0 && y<cols-1)
                     {
-                        if (net[x-1][y-1]==0)
+                        if (net[x-1][y-1]==0 && !visnet[x-1][y-1])
                         {
                             p.x = x-1;
                             p.y = y-1;
@@ -327,7 +382,7 @@ int main()
                         }
                         visnet[x-1][y-1] = true;
 
-                        if (net[x][y-1]==0)
+                        if (net[x][y-1]==0 && !visnet[x][y-1])
                         {
                             p.x = x;
                             p.y = y-1;
@@ -335,7 +390,7 @@ int main()
                         }
                         visnet[x][y-1] = true;
 
-                        if (net[x+1][y-1]==0)
+                        if (net[x+1][y-1]==0 && !visnet[x+1][y-1])
                         {
                             p.x = x+1;
                             p.y = y-1;
@@ -343,7 +398,7 @@ int main()
                         }
                         visnet[x+1][y-1] = true;
 
-                        if (net[x-1][y]==0)
+                        if (net[x-1][y]==0 && !visnet[x-1][y])
                         {
                             p.x = x-1;
                             p.y = y;
@@ -351,7 +406,7 @@ int main()
                         }
                         visnet[x-1][y] = true;
 
-                        if (net[x+1][y]==0)
+                        if (net[x+1][y]==0 && !visnet[x+1][y])
                         {
                             p.x = x+1;
                             p.y = y;
@@ -359,7 +414,7 @@ int main()
                         }
                         visnet[x+1][y] = true;
 
-                        if (net[x-1][y+1]==0)
+                        if (net[x-1][y+1]==0 && !visnet[x-1][y+1])
                         {
                             p.x = x-1;
                             p.y = y+1;
@@ -367,7 +422,7 @@ int main()
                         }
                         visnet[x-1][y+1] = true;
 
-                        if (net[x][y+1]==0)
+                        if (net[x][y+1]==0 && !visnet[x][y+1])
                         {
                             p.x = x;
                             p.y = y+1;
@@ -375,7 +430,7 @@ int main()
                         }
                         visnet[x][y+1] = true;
 
-                        if (net[x+1][y+1]==0)
+                        if (net[x+1][y+1]==0 && !visnet[x+1][y+1])
                         {
                             p.x = x+1;
                             p.y = y+1;
@@ -387,7 +442,7 @@ int main()
                     {
                         if (y==0)
                         {
-                          if (net[x-1][y]==0)
+                          if (net[x-1][y]==0 && !visnet[x-1][y])
                             {
                                 p.x = x-1;
                                 p.y = y;
@@ -395,7 +450,7 @@ int main()
                             }
                             visnet[x-1][y] = true;
 
-                            if (net[x+1][y]==0)
+                            if (net[x+1][y]==0 && !visnet[x+1][y])
                             {
                                 p.x = x+1;
                                 p.y = y;
@@ -403,7 +458,7 @@ int main()
                             }
                             visnet[x+1][y] = true;
 
-                            if (net[x-1][y+1]==0)
+                            if (net[x-1][y+1]==0 && !visnet[x-1][y+1])
                             {
                                 p.x = x-1;
                                 p.y = y+1;
@@ -411,7 +466,7 @@ int main()
                             }
                             visnet[x-1][y+1] = true;
 
-                            if (net[x][y+1]==0)
+                            if (net[x][y+1]==0 && !visnet[x][y+1])
                             {
                                 p.x = x;
                                 p.y = y+1;
@@ -419,7 +474,7 @@ int main()
                             }
                             visnet[x][y+1] = true;
 
-                            if (net[x+1][y+1]==0)
+                            if (net[x+1][y+1]==0 && !visnet[x+1][y+1])
                             {
                                 p.x = x+1;
                                 p.y = y+1;
@@ -429,7 +484,7 @@ int main()
                         }
                         else
                         {
-                            if (net[x-1][y-1]==0)
+                            if (net[x-1][y-1]==0 && !visnet[x-1][y-1])
                             {
                                 p.x = x-1;
                                 p.y = y-1;
@@ -437,7 +492,7 @@ int main()
                             }
                             visnet[x-1][y-1] = true;
 
-                            if (net[x][y-1]==0)
+                            if (net[x][y-1]==0 && !visnet[x][y-1])
                             {
                                 p.x = x;
                                 p.y = y-1;
@@ -445,7 +500,7 @@ int main()
                             }
                             visnet[x][y-1] = true;
 
-                            if (net[x+1][y-1]==0)
+                            if (net[x+1][y-1]==0 && !visnet[x+1][y-1])
                             {
                                 p.x = x+1;
                                 p.y = y-1;
@@ -453,7 +508,7 @@ int main()
                             }
                             visnet[x+1][y-1] = true;
 
-                            if (net[x-1][y]==0)
+                            if (net[x-1][y]==0 && !visnet[x-1][y])
                             {
                                 p.x = x-1;
                                 p.y = y;
@@ -461,7 +516,7 @@ int main()
                             }
                             visnet[x-1][y] = true;
 
-                            if (net[x+1][y]==0)
+                            if (net[x+1][y]==0 && !visnet[x+1][y])
                             {
                                 p.x = x+1;
                                 p.y = y;
@@ -478,7 +533,7 @@ int main()
                         if (y>0 && y<cols-1)
                         {
 
-                            if (net[x][y-1]==0)
+                            if (net[x][y-1]==0 && !visnet[x][y-1])
                             {
                                 p.x = x;
                                 p.y = y-1;
@@ -486,7 +541,7 @@ int main()
                             }
                             visnet[x][y-1] = true;
 
-                            if (net[x+1][y-1]==0)
+                            if (net[x+1][y-1]==0 && !visnet[x+1][y-1])
                             {
                                 p.x = x+1;
                                 p.y = y-1;
@@ -494,7 +549,7 @@ int main()
                             }
                             visnet[x+1][y-1] = true;
 
-                            if (net[x+1][y]==0)
+                            if (net[x+1][y]==0 && !visnet[x+1][y])
                             {
                                 p.x = x+1;
                                 p.y = y;
@@ -502,7 +557,7 @@ int main()
                             }
                             visnet[x+1][y] = true;
 
-                            if (net[x][y+1]==0)
+                            if (net[x][y+1]==0 && !visnet[x][y+1])
                             {
                                 p.x = x;
                                 p.y = y+1;
@@ -510,7 +565,7 @@ int main()
                             }
                             visnet[x][y+1] = true;
 
-                            if (net[x+1][y+1]==0)
+                            if (net[x+1][y+1]==0 && !visnet[x+1][y+1])
                             {
                                 p.x = x+1;
                                 p.y = y+1;
@@ -523,7 +578,7 @@ int main()
                             if (y==0)
                             {
 
-                                if (net[x+1][y]==0)
+                                if (net[x+1][y]==0 && !visnet[x+1][y])
                                 {
                                     p.x = x+1;
                                     p.y = y;
@@ -531,7 +586,7 @@ int main()
                                 }
                                 visnet[x+1][y] = true;
 
-                                if (net[x][y+1]==0)
+                                if (net[x][y+1]==0 && !visnet[x][y+1])
                                 {
                                     p.x = x;
                                     p.y = y+1;
@@ -539,7 +594,7 @@ int main()
                                 }
                                 visnet[x][y+1] = true;
 
-                                if (net[x+1][y+1]==0)
+                                if (net[x+1][y+1]==0 && !visnet[x+1][y+1])
                                 {
                                     p.x = x+1;
                                     p.y = y+1;
@@ -550,7 +605,7 @@ int main()
                             else
                             {
 
-                                if (net[x][y-1]==0)
+                                if (net[x][y-1]==0 && !visnet[x][y-1])
                                 {
                                     p.x = x;
                                     p.y = y-1;
@@ -558,7 +613,7 @@ int main()
                                 }
                                 visnet[x][y-1] = true;
 
-                                if (net[x+1][y-1]==0)
+                                if (net[x+1][y-1]==0 && !visnet[x+1][y-1])
                                 {
                                     p.x = x+1;
                                     p.y = y-1;
@@ -566,7 +621,7 @@ int main()
                                 }
                                 visnet[x+1][y-1] = true;
 
-                                if (net[x+1][y]==0)
+                                if (net[x+1][y]==0 && !visnet[x+1][y])
                                 {
                                     p.x = x+1;
                                     p.y = y;
@@ -581,7 +636,7 @@ int main()
                     {
                         if (y>0 && y<cols-1)
                         {
-                			if (net[x-1][y-1]==0)
+                			if (net[x-1][y-1]==0 && !visnet[x-1][y-1])
                             {
                                 p.x = x-1;
                                 p.y = y-1;
@@ -589,7 +644,7 @@ int main()
                             }
                             visnet[x-1][y-1] = true;
 
-                            if (net[x][y-1]==0)
+                            if (net[x][y-1]==0 && !visnet[x][y-1])
                             {
                                 p.x = x;
                                 p.y = y-1;
@@ -597,7 +652,7 @@ int main()
                             }
                             visnet[x][y-1] = true;
 
-                            if (net[x-1][y]==0)
+                            if (net[x-1][y]==0 && !visnet[x-1][y])
                             {
                                 p.x = x-1;
                                 p.y = y;
@@ -605,7 +660,7 @@ int main()
                             }
                             visnet[x-1][y] = true;
 
-                            if (net[x-1][y+1]==0)
+                            if (net[x-1][y+1]==0 && !visnet[x-1][y+1])
                             {
                                 p.x = x-1;
                                 p.y = y+1;
@@ -613,7 +668,7 @@ int main()
                             }
                             visnet[x-1][y+1] = true;
 
-                            if (net[x][y+1]==0)
+                            if (net[x][y+1]==0 && !visnet[x][y+1])
                             {
                                 p.x = x;
                                 p.y = y+1;
@@ -627,7 +682,7 @@ int main()
                             if (y==0)
                             {
 
-                                if (net[x-1][y]==0)
+                                if (net[x-1][y]==0 && !visnet[x-1][y])
                                 {
                                     p.x = x-1;
                                     p.y = y;
@@ -635,7 +690,7 @@ int main()
                                 }
                                 visnet[x-1][y] = true;
 
-                                if (net[x-1][y+1]==0)
+                                if (net[x-1][y+1]==0 && !visnet[x-1][y+1])
                                 {
                                     p.x = x-1;
                                     p.y = y+1;
@@ -643,7 +698,7 @@ int main()
                                 }
                                 visnet[x-1][y+1] = true;
 
-                                if (net[x][y+1]==0)
+                                if (net[x][y+1]==0 && !visnet[x][y+1])
                                 {
                                     p.x = x;
                                     p.y = y+1;
@@ -653,7 +708,7 @@ int main()
                             }
                             else
                             {
-                    			if (net[x-1][y-1]==0)
+                    			if (net[x-1][y-1]==0 && !visnet[x-1][y-1])
                                 {
                                     p.x = x-1;
                                     p.y = y-1;
@@ -661,7 +716,7 @@ int main()
                                 }
                                 visnet[x-1][y-1] = true;
 
-                                if (net[x][y-1]==0)
+                                if (net[x][y-1]==0 && !visnet[x][y-1])
                                 {
                                     p.x = x;
                                     p.y = y-1;
@@ -669,22 +724,16 @@ int main()
                                 }
                                 visnet[x][y-1] = true;
 
-                                if (net[x-1][y]==0)
+                                if (net[x-1][y]==0 && !visnet[x-1][y])
                                 {
                                     p.x = x-1;
                                     p.y = y;
                                     waweq.push(p);
                                 }
                                 visnet[x-1][y] = true;
-
                             }
                         }    
                     }
-                }
-
-                if(!waweq.empty())
-                {
-                    beach=false;
                 }
             }
         }
@@ -707,6 +756,11 @@ int main()
                 }
             }
             cout << endl;
+        }
+        if (visnet == winnet)
+        {
+            cout << "Gratulujem, vyhral si.";
+            return 0;
         }
 
 
