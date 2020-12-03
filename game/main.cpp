@@ -118,8 +118,8 @@ cout << "hatata patata";
 
 int main()
 {
-    int dfct = 1, rows = 9, cols = 9;     //declarate size of array `net`
-/*    while ((dfct>3) or (dfct<1))
+    int dfct = 5, rows = 9, cols = 9;     //declarate size of array `net`
+    while ((dfct>3) or (dfct<1))
     {
         cout << "Zadaj vysku obtiaznosti od 1 do 3: ";
         cin >> dfct;
@@ -129,7 +129,7 @@ int main()
         }
     }
     // enum quad 
-*/    int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
+    int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
     string file = "mine.txt";
 /*    srand((int)time(0));
     ofstream outfile;
@@ -777,7 +777,3 @@ int main()
     }
     return 0;       //return to int main number 0
 }
-
-
-
-
