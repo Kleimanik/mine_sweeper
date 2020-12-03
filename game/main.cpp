@@ -119,7 +119,7 @@ cout << "hatata patata";
 int main()
 {
     int dfct = 1, rows = 9, cols = 9;     //declarate size of array `net`
-/*    while (dfct<4 && dfct>0)
+/*    while ((dfct>3) or (dfct<1))
     {
         cout << "Zadaj vysku obtiaznosti od 1 do 3: ";
         cin >> dfct;
