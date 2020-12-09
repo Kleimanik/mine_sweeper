@@ -129,7 +129,7 @@ int main()
         }
     }
     // enum quad 
-    int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
+//    int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
     string file = "mine.txt";
     srand((int)time(0));
     ofstream outfile;
@@ -143,30 +143,32 @@ int main()
     if (dfct==1)
     {
         dfct = 10;
-        rows = 9;
-        cols = 9;
+        rows = 11;
+        cols = 11;
     }
     else
     {
         if(dfct==2)
         {
             dfct = 40;
-            rows = 16;
-            cols = 16;
+            rows = 18;
+            cols = 18;
         }
         else
         {
             dfct = 99;
-            rows = 22;
-            cols = 22;
+            rows = 24;
+            cols = 24;
         }
     }
     for (int i=0; i<dfct; i++)
     {
-        x = rand() % rows;
+        x = rand() % rows-2;
+        x++;
         outfile << x;
         outfile << " ";
-        y = rand() % cols;
+        y = rand() % cols-2;
+        y++;
         outfile << y;
         outfile << endl;
     }
@@ -177,9 +179,8 @@ int main()
         return 0;
     }
 
-//    cout << "Zadaj nazov suboru: " ;
-//    cin >> file;                        //space where user set the name of text file with mines place
-//    cout << file << endl;               //just for check
+    int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
+
     ifstream infile(file);              //ifstream declarate infile to work with file that we choose
     if (infile.is_open()==false)               //if file is open then fun the program but if not, just say Error 404.(r32)
     {
@@ -201,7 +202,7 @@ int main()
     bool winnet[rows][cols];
     for (x=0;x<rows;x++)
     {
-        for (y=0;y<cols;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+        for (y=0;y<cols;y++)        //this cycle is to set up winnet where mines are false and other is true
         {
             if (net[x][y]==9)
             {
@@ -225,7 +226,7 @@ int main()
         }
     }*/
 
-    for (x=0;x<rows;x++)
+/*    for (x=0;x<rows;x++)
     {
         for (y=0;y<cols;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
         {
@@ -321,9 +322,27 @@ int main()
                 }
             }                
         }
-    }
+    }*/
 
     for (x=0;x<rows;x++)
+    {
+        for (y=0;y<cols;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
+        {
+            if (!winnet[x][y])
+            {
+                if (winnet[x+1][y]){net[x+1][y]++;}
+                if (winnet[x+1][y+1]){net[x+1][y+1]++;}
+                if (winnet[x+1][y-1]){net[x+1][y-1]++;}
+                if (winnet[x-1][y]){net[x-1][y]++;}
+                if (winnet[x-1][y+1]){net[x-1][y+1]++;}
+                if (winnet[x-1][y-1]){net[x-1][y-1]++;}
+                if (winnet[x][y+1]){net[x][y+1]++;}
+                if (winnet[x][y-1]){net[x][y-1]++;}
+            }
+        }
+    }
+
+/*    for (x=0;x<rows;x++)
     {
         for (y=0;y<cols;y++)
         {
@@ -332,20 +351,20 @@ int main()
                 net[x][y]=9;
             } 
         }
-    }
+    }*/
 
     bool visnet[rows][cols];
-    for (x=0;x<rows;x++)
+    for (x=1;x<rows-1;x++)
     {
-        for (y=0;y<cols;y++)        //this cycle is to reset all variable in array visnet to false
+        for (y=1;y<cols-1;y++)        //this cycle is to reset all variable in array visnet to false
         {
             visnet[x][y] = false; 
         }
     }
 
-    for (x=0;x<rows;x++)
+    for (x=1;x<rows-1;x++)
     {
-        for (y=0;y<cols;y++)
+        for (y=1;y<cols-1;y++)
         {
             if (visnet[x][y]==false)
             {
@@ -365,6 +384,8 @@ int main()
         cout << "Zadaj suradnice pola ktore chces vybrat: ";
         int vx,vy;
         cin >> vx >> vy;
+        vx++;
+        vy++;
         visnet [vx] [vy] = true;
 
         if (net[vx][vy]==0)
@@ -381,7 +402,7 @@ int main()
                 x = p.x;
                 y = p.y;
 
-                if (x>0 && x<rows-1)
+            /*    if (x>0 && x<rows-1)
                 {
                     if (y>0 && y<cols-1)
                     {
@@ -746,12 +767,76 @@ int main()
                         }    
                     }
                 }
+            }*/
+                if (net[x-1][y-1]==0 && !visnet[x-1][y-1])
+                {
+                    p.x = x-1;
+                    p.y = y-1;
+                    waweq.push(p);
+                }
+                visnet[x-1][y-1] = true;
+
+                if (net[x][y-1]==0 && !visnet[x][y-1])
+                {
+                    p.x = x;
+                    p.y = y-1;
+                    waweq.push(p);
+                }
+                visnet[x][y-1] = true;
+
+                if (net[x+1][y-1]==0 && !visnet[x+1][y-1])
+                {
+                    p.x = x+1;
+                    p.y = y-1;
+                    waweq.push(p);
+                }
+                visnet[x+1][y-1] = true;
+
+                if (net[x-1][y]==0 && !visnet[x-1][y])
+                {
+                    p.x = x-1;
+                    p.y = y;
+                    waweq.push(p);
+                }
+                visnet[x-1][y] = true;
+
+                if (net[x+1][y]==0 && !visnet[x+1][y])
+                {
+                    p.x = x+1;
+                    p.y = y;
+                    waweq.push(p);
+                }
+                visnet[x+1][y] = true;
+
+                if (net[x-1][y+1]==0 && !visnet[x-1][y+1])
+                {
+                    p.x = x-1;
+                    p.y = y+1;
+                    waweq.push(p);
+                }
+                visnet[x-1][y+1] = true;
+
+                if (net[x][y+1]==0 && !visnet[x][y+1])
+                {
+                    p.x = x;
+                    p.y = y+1;
+                    waweq.push(p);
+                }
+                visnet[x][y+1] = true;
+
+                if (net[x+1][y+1]==0 && !visnet[x+1][y+1])
+                {
+                    p.x = x+1;
+                    p.y = y+1;
+                    waweq.push(p);
+                }
+                visnet[x+1][y+1] = true;
             }
         }
 
-        for (x=0;x<rows;x++)        // ine premenne
+        for (x=1;x<rows-1;x++)        // ine premenne
         {
-            for (y=0;y<cols;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+            for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
             {
                 if (visnet[x][y]==false)
                 {
@@ -778,9 +863,9 @@ int main()
     }
     cout << "Vybuchol si, skus svoje stastie nabuduce." << endl;
 
-    for (x=0;x<rows;x++)
+    for (x=1;x<rows-1;x++)
     {
-        for (y=0;y<cols;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+        for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
         {
             cout << net[x][y] << " "; 
         }
