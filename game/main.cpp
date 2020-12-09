@@ -131,16 +131,16 @@ int main()
     // enum quad 
     int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
     string file = "mine.txt";
-/*    srand((int)time(0));
+    srand((int)time(0));
     ofstream outfile;
     outfile.open(file);
     if (!outfile.is_open())
     {
         cout << "Error 404.";
         return 0;
-    }*/
+    }
     int x, y;
-/*    if (dfct==1)
+    if (dfct==1)
     {
         dfct = 10;
         rows = 9;
@@ -175,7 +175,7 @@ int main()
     {
         cout << "Error 404.";
         return 0;
-    }*/
+    }
 
 //    cout << "Zadaj nazov suboru: " ;
 //    cin >> file;                        //space where user set the name of text file with mines place
@@ -235,14 +235,14 @@ int main()
                 {
                     if (y>0 && y<cols-1)
                     {
-                        net[x+1][y]++;
-                        net[x+1][y+1]++;
-                        net[x+1][y-1]++;
-                        net[x-1][y]++;
-                        net[x-1][y+1]++;
-                        net[x-1][y-1]++;
-                        net[x][y+1]++;
-                        net[x][y-1]++;
+                        if (winnet[x+1][y]){net[x+1][y]++;}
+                        if (winnet[x+1][y+1]){net[x+1][y+1]++;}
+                        if (winnet[x+1][y-1]){net[x+1][y-1]++;}
+                        if (winnet[x-1][y]){net[x-1][y]++;}
+                        if (winnet[x-1][y+1]){net[x-1][y+1]++;}
+                        if (winnet[x-1][y-1]){net[x-1][y-1]++;}
+                        if (winnet[x][y+1]){net[x][y+1]++;}
+                        if (winnet[x][y-1]){net[x][y-1]++;}
                     }
                     else
                     {
@@ -323,6 +323,17 @@ int main()
         }
     }
 
+    for (x=0;x<rows;x++)
+    {
+        for (y=0;y<cols;y++)
+        {
+            if(net[x][y]>8)
+            {
+                net[x][y]=9;
+            } 
+        }
+    }
+
     bool visnet[rows][cols];
     for (x=0;x<rows;x++)
     {
@@ -334,7 +345,7 @@ int main()
 
     for (x=0;x<rows;x++)
     {
-        for (y=0;y<cols;y++)        //
+        for (y=0;y<cols;y++)
         {
             if (visnet[x][y]==false)
             {
