@@ -163,11 +163,11 @@ int main()
     }
     for (int i=0; i<dfct; i++)
     {
-        x = rand() % rows-2;
+        x = rand() % (rows-2);
         x++;
         outfile << x;
         outfile << " ";
-        y = rand() % cols-2;
+        y = rand() % (cols-2);
         y++;
         outfile << y;
         outfile << endl;
