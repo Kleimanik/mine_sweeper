@@ -324,6 +324,8 @@ int main()
         }
     }*/
 
+
+
     for (x=0;x<rows;x++)
     {
         for (y=0;y<cols;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
@@ -340,6 +342,18 @@ int main()
                 if (winnet[x][y-1]){net[x][y-1]++;}
             }
         }
+    }
+
+    for (x=0;x<rows;x++)
+    {
+        net[x][0]=1;
+        net[x][cols-1];
+    }
+    
+    for (y=0;y<cols;y++)
+    {
+        net[0][y]=1;
+        net[rows-1][y];
     }
 
 /*    for (x=0;x<rows;x++)
@@ -384,8 +398,6 @@ int main()
         cout << "Zadaj suradnice pola ktore chces vybrat: ";
         int vx,vy;
         cin >> vx >> vy;
-        vx++;
-        vy++;
         visnet [vx] [vy] = true;
 
         if (net[vx][vy]==0)
@@ -853,7 +865,18 @@ int main()
             }
             cout << endl;
         }
-        if (visnet == winnet)
+        bool win=true;
+        for (x=1;x<rows-1;x++)
+        {
+            for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+            {
+                if (visnet[x][y]!=winnet[x][y])
+                {
+                    win=false;
+                }
+            }
+        }
+        if (win)
         {
             cout << "Gratulujem, vyhral si.";
             return 0;
