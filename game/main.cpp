@@ -5,6 +5,8 @@
 #include <queue>
 #include <cstdlib>
 #include <time.h>
+#include <SFML/Graphics.hpp>    // library for graphic from sfml
+
 using namespace std;    //std is for commands cin/cout here i declaret to use it every time or if I do`t, I can use it separate in program
 
 struct Point
@@ -12,7 +14,7 @@ struct Point
     int x,y;
 };
 
-
+int BLOCK = 16;
 
 /*void set_up_net ( int net[][], int rows , int cols)
 {
@@ -128,8 +130,6 @@ int main()
             cout << "Skus to znova." << endl;
         }
     }
-    // enum quad 
-//    int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
     string file = "mine.txt";
     srand((int)time(0));
     ofstream outfile;
