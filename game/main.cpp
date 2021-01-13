@@ -24,6 +24,57 @@ int main()
     {
         std::cout << "Error texture load." << std::endl;
     }
+    sf::Texture home_screen_texture;
+    if (!home_screen_texture.loadFromFile("minesweeper_title_screen.png"))
+    {
+        std::cout << "Error texture load2." << std::endl;
+    }
+    sf::Texture t_easy;
+    if (!t_easy.loadFromFile("minesweeper_easy.png"))
+    {
+        std::cout << "Error texture load3." << std::endl;
+    }
+    sf::Texture t_easy_press;
+    if (!t_easy_press.loadFromFile("minesweeper_easy_press.png"))
+    {
+        std::cout << "Error texture load4." << std::endl;
+    }
+    sf::Texture t_medium;
+    if (!t_medium.loadFromFile("minesweeper_medium.png"))
+    {
+        std::cout << "Error texture load5." << std::endl;
+    }
+    sf::Texture t_medium_press;
+    if (!t_medium_press.loadFromFile("minesweeper_medium_press.png"))
+    {
+        std::cout << "Error texture load6." << std::endl;
+    }
+    sf::Texture t_hard;
+    if (!t_hard.loadFromFile("minesweeper_hard.png"))
+    {
+        std::cout << "Error texture load7." << std::endl;
+    }
+    sf::Texture t_hard_press;
+    if (!t_hard_press.loadFromFile("minesweeper_hard_press.png"))
+    {
+        std::cout << "Error texture load8." << std::endl;
+    }
+    sf::Sprite home_screen, easy, easy_press, medium, medium_press, hard, hard_press;
+    home_screen.setTexture(home_screen_texture);
+    home_screen.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+    easy.setTexture(t_easy);
+    easy.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+    easy_press.setTexture(t_easy_press);
+    easy_press.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+    medium.setTexture(t_medium);
+    medium.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+    medium_press.setTexture(t_medium_press);
+    medium_press.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+    hard.setTexture(t_hard);
+    hard.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+    hard_press.setTexture(t_hard_press);
+    hard_press.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+    
     sf::Sprite frame0, frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8;
     sf::Sprite cowerd_frame, flag_frame, expl_mine, no_mine, mine, cow_qm, uncow_qm;
     frame0.setTexture(texture);
@@ -64,17 +115,83 @@ int main()
 
         sf::RenderWindow game_window(sf::VideoMode(20*BLOCK, 20*BLOCK), "Minesweeper");     //here I start graphics by rendering window
 
-
         int dfct = 5, rows = 9, cols = 9;     //declarate size of array `net`
-        while ((dfct>3) or (dfct<1))
+        bool play=false;
+        while (!play)
         {
-            cout << "Zadaj vysku obtiaznosti od 1 do 3: ";
-            cin >> dfct;
-            if ((dfct>3) or (dfct<1))
+            home_screen.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+            game_window.draw(home_screen);
+            
+            sf::Event event;
+            int x,y;
+            bool click=false;
+            while(game_window.pollEvent(event))
             {
-                cout << "Skus to znova." << endl;
+                
+                sf::Vector2i mpos = sf::Mouse::getPosition(game_window);
+                x = mpos.x/BLOCK;
+                y = mpos.y/BLOCK;
+
+                if (event.type == sf::Event::Closed)
+                {
+                    game_window.close();
+                    return 0;
+                }
+                if (event.type == sf::Event::MouseButtonPressed)
+                {
+                    if (event.key.code == sf::Mouse::Left)
+                    {
+                        click = true;
+                    }
+                }
             }
-        }    string file = "mine.txt";
+
+            if((x>12) and (x<18) and (11>=y) and (y>8))
+            {
+                dfct=1;
+                easy_press.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(easy_press);
+                if (click)
+                    play=true;
+            }
+            else
+            {
+                easy.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(easy);
+            }
+            if((x>9) and (x<18) and (14>=y) and (y>11))
+            {
+                dfct=2;
+                medium_press.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(medium_press);
+                if (click)
+                    play=true;
+            }
+            else
+            {
+                medium.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(medium);
+            }
+            if((x>11) and (x<18) and (17>y) and (y>14))
+            {
+                dfct=3;
+                hard_press.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(hard_press);
+                if (click)
+                    play=true;
+            }
+            else
+            {
+                hard.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(hard);
+            }
+            
+
+            game_window.display();
+            game_window.clear();
+
+        }
+        string file = "mine.txt";
         srand((int)time(0));
         ofstream outfile;
         outfile.open(file);
@@ -159,9 +276,9 @@ int main()
             }
         }
 
-        for (x=0;x<rows;x++)
+        for (x=0;x<rows;x++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
         {
-            for (y=0;y<cols;y++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
+            for (y=0;y<cols;y++)
             {
                 if (!winnet[x][y])
                 {
