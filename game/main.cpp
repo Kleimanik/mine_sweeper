@@ -139,7 +139,7 @@ int main()
                 }
                 if (event.type == sf::Event::MouseButtonPressed)
                 {
-                    if (event.key.code == sf::Mouse::Left)
+                    if (event.mouseButton.button == sf::Mouse::Left)
                     {
                         click = true;
                     }
@@ -340,7 +340,7 @@ int main()
                 }
                 if (e.type == sf::Event::MouseButtonPressed)
                 {
-                    if (e.key.code == sf::Mouse::Left)
+                    if (e.mouseButton.button == sf::Mouse::Left)
                     {
                         visnet [vx] [vy] = true;
                     }
