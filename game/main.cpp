@@ -367,7 +367,10 @@ int main()
                 if (e.type == sf::Event::Closed)
                 {
                     game_window.close();
-                    return 0;
+//                    return 0;
+                    run=false;
+                    game=false;
+                    
                 }
                 if (e.type == sf::Event::MouseButtonPressed)
                 {
@@ -388,19 +391,22 @@ int main()
             
             if(r_click)
             {
-                if(not_click_net[vx][vy]==0)
+                if (visnet[vx][vy]==false)
                 {
-                    not_click_net[vx][vy]++;
-                }
-                else
-                {
-                    if(not_click_net[vx][vy]==1)
+                    if(not_click_net[vx][vy]==0)
                     {
                         not_click_net[vx][vy]++;
                     }
                     else
                     {
-                        not_click_net[vx][vy]=0;
+                        if(not_click_net[vx][vy]==1)
+                        {
+                            not_click_net[vx][vy]++;
+                        }
+                        else
+                        {
+                            not_click_net[vx][vy]=0;
+                        }
                     }
                 }
             }
@@ -625,12 +631,14 @@ int main()
             }
 
             if(win)
+            {
                 run=false;
+            }
 
             game_window.display();
         }
 
-        bool end_game=true;
+        bool end_game=false;
         while (end_game)
         {
             sf::Event e;
@@ -780,6 +788,60 @@ int main()
             game_window.display();
             game_window.clear();
         }
+
+
+            for (x=1;x<rows-1;x++)
+            {
+                for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+                {
+                    if(visnet[x][y])
+                    {
+                        cout << "O ";
+                    }
+                    else
+                    {
+                        cout << "X ";
+                    }
+                }
+                cout << endl;
+            }
+
+                cout << endl;
+                cout << endl;
+            for (x=1;x<rows-1;x++)
+            {
+                for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+                {
+                    if(flag_net[x][y])
+                    {
+                        cout << "O ";
+                    }
+                    else
+                    {
+                        cout << "X ";
+                    }
+                }
+                cout << endl;
+            }
+            
+                cout << endl;
+                cout << endl;
+            for (x=1;x<rows-1;x++)
+            {
+                for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+                {
+                    if(winnet[x][y])
+                    {
+                        cout << "O ";
+                    }
+                    else
+                    {
+                        cout << "X ";
+                    }
+                }
+                cout << endl;
+            }
     }
+
     return 0;       //return to int main number 0
 }
