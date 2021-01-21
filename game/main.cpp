@@ -31,60 +31,41 @@ int main()
     {
         std::cout << "Error texture load2." << std::endl;
     }
-    sf::Sprite s_home_screen;//, s_dfct[5];  // easy, easy_press, medium, medium_press, hard, hard_press;
-    s_home_screen.setTexture(t_home_screen);
-    s_home_screen.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
-    sf::Texture t_dfct[5];
+    sf::Texture t_dfct[6];
     if (!t_dfct[0].loadFromFile("minesweeper_easy.png"))
     {
         std::cout << "Error texture load3." << std::endl;
     }
-    //sf::Texture t_easy_press;
     if (!t_dfct[1].loadFromFile("minesweeper_easy_press.png"))
     {
         std::cout << "Error texture load4." << std::endl;
     }
-    //sf::Texture t_medium;
     if (!t_dfct[2].loadFromFile("minesweeper_medium.png"))
     {
         std::cout << "Error texture load5." << std::endl;
     }
-    //sf::Texture t_medium_press;
     if (!t_dfct[3].loadFromFile("minesweeper_medium_press.png"))
     {
         std::cout << "Error texture load6." << std::endl;
     }
-    //sf::Texture t_hard;
     if (!t_dfct[4].loadFromFile("minesweeper_hard.png"))
     {
         std::cout << "Error texture load7." << std::endl;
     }
-    //sf::Texture t_hard_press;
     if (!t_dfct[5].loadFromFile("minesweeper_hard_press.png"))
     {
         std::cout << "Error texture load8." << std::endl;
     }
-/*    sf::Sprite  s_dfct[5];
+
+    sf::Sprite s_home_screen, s_dfct[6];
+    s_home_screen.setTexture(t_home_screen);
+    s_home_screen.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+
     for (int i=0; i<6; i++)
     {
         s_dfct[i].setTexture(t_dfct[i]);
         s_dfct[i].setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
-    }*/
-
-/*   
-    easy.setTexture(t_easy);
-    easy.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
-    easy_press.setTexture(t_easy_press);
-    easy_press.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
-    medium.setTexture(t_medium);
-    medium.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
-    medium_press.setTexture(t_medium_press);
-    medium_press.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
-    hard.setTexture(t_hard);
-    hard.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
-    hard_press.setTexture(t_hard_press);
-    hard_press.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
-    */
+    }
 
     sf::Sprite frame[9];
     for (int i=0; i<9; i++)
@@ -115,30 +96,9 @@ int main()
 
         sf::RenderWindow game_window(sf::VideoMode(20*BLOCK, 20*BLOCK), "Minesweeper");     //here I start graphics by rendering window
 
-
-            game_window.clear();
-            s_home_screen.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
-            game_window.draw(s_home_screen);
-            
-            game_window.display();
         int dfct = 0, rows = 0, cols = 0;     //declarate size of array `net`
         bool play=false;
-        while (true)
-        {
-            sf::Event event;
-            while(game_window.pollEvent(event))
-            {
-                if (event.type == sf::Event::Closed)
-                {
-                    game_window.close();
-                    return 0;
-                }
-            }
-        }
-    }
-}
-        /*
-        while (play)
+        while (!play)
         {
             s_home_screen.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
             game_window.draw(s_home_screen);
@@ -592,4 +552,3 @@ int main()
 
     return 0;       //return to int main number 0
 }
-*/
