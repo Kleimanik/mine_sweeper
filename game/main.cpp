@@ -9,6 +9,8 @@
 
 using namespace std;    //std is for commands cin/cout here i declaret to use it every time or if I do`t, I can use it separate in program
 
+
+
 struct Point
 {
     int x,y;
@@ -24,44 +26,52 @@ int main()
     {
         std::cout << "Error texture load." << std::endl;
     }
-    sf::Texture home_screen_texture;
-    if (!home_screen_texture.loadFromFile("minesweeper_title_screen.png"))
+    sf::Texture t_home_screen;
+    if (!t_home_screen.loadFromFile("minesweeper_title_screen.png"))
     {
         std::cout << "Error texture load2." << std::endl;
     }
-    sf::Texture t_easy;
-    if (!t_easy.loadFromFile("minesweeper_easy.png"))
+    sf::Sprite s_home_screen;//, s_dfct[5];  // easy, easy_press, medium, medium_press, hard, hard_press;
+    s_home_screen.setTexture(t_home_screen);
+    s_home_screen.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+    sf::Texture t_dfct[5];
+    if (!t_dfct[0].loadFromFile("minesweeper_easy.png"))
     {
         std::cout << "Error texture load3." << std::endl;
     }
-    sf::Texture t_easy_press;
-    if (!t_easy_press.loadFromFile("minesweeper_easy_press.png"))
+    //sf::Texture t_easy_press;
+    if (!t_dfct[1].loadFromFile("minesweeper_easy_press.png"))
     {
         std::cout << "Error texture load4." << std::endl;
     }
-    sf::Texture t_medium;
-    if (!t_medium.loadFromFile("minesweeper_medium.png"))
+    //sf::Texture t_medium;
+    if (!t_dfct[2].loadFromFile("minesweeper_medium.png"))
     {
         std::cout << "Error texture load5." << std::endl;
     }
-    sf::Texture t_medium_press;
-    if (!t_medium_press.loadFromFile("minesweeper_medium_press.png"))
+    //sf::Texture t_medium_press;
+    if (!t_dfct[3].loadFromFile("minesweeper_medium_press.png"))
     {
         std::cout << "Error texture load6." << std::endl;
     }
-    sf::Texture t_hard;
-    if (!t_hard.loadFromFile("minesweeper_hard.png"))
+    //sf::Texture t_hard;
+    if (!t_dfct[4].loadFromFile("minesweeper_hard.png"))
     {
         std::cout << "Error texture load7." << std::endl;
     }
-    sf::Texture t_hard_press;
-    if (!t_hard_press.loadFromFile("minesweeper_hard_press.png"))
+    //sf::Texture t_hard_press;
+    if (!t_dfct[5].loadFromFile("minesweeper_hard_press.png"))
     {
         std::cout << "Error texture load8." << std::endl;
     }
-    sf::Sprite home_screen, easy, easy_press, medium, medium_press, hard, hard_press;
-    home_screen.setTexture(home_screen_texture);
-    home_screen.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+/*    sf::Sprite  s_dfct[5];
+    for (int i=0; i<6; i++)
+    {
+        s_dfct[i].setTexture(t_dfct[i]);
+        s_dfct[i].setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
+    }*/
+
+/*   
     easy.setTexture(t_easy);
     easy.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
     easy_press.setTexture(t_easy_press);
@@ -74,13 +84,15 @@ int main()
     hard.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
     hard_press.setTexture(t_hard_press);
     hard_press.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
-    
+    */
+
     sf::Sprite frame[9];
     for (int i=0; i<9; i++)
     {
         frame[i].setTexture(texture);
         frame[i].setTextureRect(sf::IntRect(i*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
     }
+
     sf::Sprite cowerd_frame, flag_frame, expl_mine, no_mine, mine, cow_qm, uncow_qm;
     cowerd_frame.setTexture(texture);
     cowerd_frame.setTextureRect(sf::IntRect(0*BLOCK, 1*BLOCK, 1*BLOCK, 1*BLOCK));
@@ -103,12 +115,33 @@ int main()
 
         sf::RenderWindow game_window(sf::VideoMode(20*BLOCK, 20*BLOCK), "Minesweeper");     //here I start graphics by rendering window
 
-        int dfct = 5, rows = 9, cols = 9;     //declarate size of array `net`
+
+            game_window.clear();
+            s_home_screen.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+            game_window.draw(s_home_screen);
+            
+            game_window.display();
+        int dfct = 0, rows = 0, cols = 0;     //declarate size of array `net`
         bool play=false;
-        while (!play)
+        while (true)
         {
-            home_screen.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
-            game_window.draw(home_screen);
+            sf::Event event;
+            while(game_window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                {
+                    game_window.close();
+                    return 0;
+                }
+            }
+        }
+    }
+}
+        /*
+        while (play)
+        {
+            s_home_screen.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+            game_window.draw(s_home_screen);
             
             sf::Event event;
             int x,y;
@@ -137,41 +170,41 @@ int main()
             if((x>12) and (x<18) and (11>=y) and (y>8))
             {
                 dfct=1;
-                easy_press.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
-                game_window.draw(easy_press);
+                s_dfct[(dfct*2)-1].setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(s_dfct[(dfct*2)-1]);
                 if (click)
                     play=true;
             }
             else
             {
-                easy.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
-                game_window.draw(easy);
+                s_dfct[0].setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(s_dfct[0]);
             }
             if((x>9) and (x<18) and (14>=y) and (y>11))
             {
                 dfct=2;
-                medium_press.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
-                game_window.draw(medium_press);
+                s_dfct[(dfct*2)-1].setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(s_dfct[(dfct*2)-1]);
                 if (click)
                     play=true;
             }
             else
             {
-                medium.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
-                game_window.draw(medium);
+                s_dfct[2].setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(s_dfct[2]);
             }
             if((x>11) and (x<18) and (17>y) and (y>14))
             {
                 dfct=3;
-                hard_press.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
-                game_window.draw(hard_press);
+                s_dfct[(dfct*2)-1].setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(s_dfct[(dfct*2)-1]);
                 if (click)
                     play=true;
             }
             else
             {
-                hard.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
-                game_window.draw(hard);
+                s_dfct[4].setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+                game_window.draw(s_dfct[4]);
             }
             
 
@@ -559,3 +592,4 @@ int main()
 
     return 0;       //return to int main number 0
 }
+*/
