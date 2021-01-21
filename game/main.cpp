@@ -75,26 +75,13 @@ int main()
     hard_press.setTexture(t_hard_press);
     hard_press.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 20*BLOCK, 20*BLOCK));
     
-    sf::Sprite frame0, frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8;
+    sf::Sprite frame[9];
+    for (int i=0; i<9; i++)
+    {
+        frame[i].setTexture(texture);
+        frame[i].setTextureRect(sf::IntRect(i*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
+    }
     sf::Sprite cowerd_frame, flag_frame, expl_mine, no_mine, mine, cow_qm, uncow_qm;
-    frame0.setTexture(texture);
-    frame0.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
-    frame1.setTexture(texture);
-    frame1.setTextureRect(sf::IntRect(1*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
-    frame2.setTexture(texture);
-    frame2.setTextureRect(sf::IntRect(2*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
-    frame3.setTexture(texture);
-    frame3.setTextureRect(sf::IntRect(3*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
-    frame4.setTexture(texture);
-    frame4.setTextureRect(sf::IntRect(4*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
-    frame5.setTexture(texture);
-    frame5.setTextureRect(sf::IntRect(5*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
-    frame6.setTexture(texture);
-    frame6.setTextureRect(sf::IntRect(6*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
-    frame7.setTexture(texture);
-    frame7.setTextureRect(sf::IntRect(7*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
-    frame8.setTexture(texture);
-    frame8.setTextureRect(sf::IntRect(8*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
     cowerd_frame.setTexture(texture);
     cowerd_frame.setTextureRect(sf::IntRect(0*BLOCK, 1*BLOCK, 1*BLOCK, 1*BLOCK));
     flag_frame.setTexture(texture);
@@ -193,15 +180,6 @@ int main()
 
         }
         
-        string file = "mine.txt";
-        srand((int)time(0));
-        ofstream outfile;
-        outfile.open(file);
-        if (!outfile.is_open())
-        {
-            cout << "Error 404.";
-            return 0;
-        }
         int x, y;
         if (dfct==1)
         {
@@ -224,58 +202,26 @@ int main()
                 cols = 24;
             }
         }
+
+        bool winnet[rows][cols]={true};
+        for (x=0;x<rows;x++)
+        {
+            for (y=0;y<cols;y++)
+            {
+                winnet[x][y]=true;
+            }
+        }
+        
+        int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
+        srand((int)time(0));
         for (int i=0; i<dfct; i++)
         {
             x = rand() % (rows-2);
             x++;
-            outfile << x;
-            outfile << " ";
             y = rand() % (cols-2);
             y++;
-            outfile << y;
-            outfile << endl;
-        }
-        outfile.close();
-        if (outfile.is_open())
-        {
-            cout << "Error 404.";
-            return 0;
-        }
-
-        int net [rows][cols]={};   //declarate main array named net and reset every atribute to 0
-
-        ifstream infile(file);              //ifstream declarate infile to work with file that we choose
-        if (infile.is_open()==false)               //if file is open then fun the program but if not, just say Error 404.(r32)
-        {
-            cout << "Error 404.";
-            return 0;
-        }
-        string fline, frstint, scndint;
-        while (getline(infile,fline))       //getline is to read from file, the secon atribute is variable where getline write from file till he hits endline
-        {
-            stringstream ss(fline);         //converting string to stream so we can read it with getline
-            getline(ss,frstint,' ');        //reading stream `ss` until hits ` ` (the 3rd atribute in bar)
-            getline(ss,scndint,' ');    
-            x = stoi(frstint);          //stoi is coverting string variable to integer
-            y = stoi(scndint);          //stoi is converting only to string!!!
+            winnet[x][y]=false;
             net [x][y] = 9;
-        }
-
-
-        bool winnet[rows][cols];
-        for (x=0;x<rows;x++)
-        {
-            for (y=0;y<cols;y++)        //this cycle is to set up winnet where mines are false and other is true
-            {
-                if (net[x][y]==9)
-                {
-                    winnet[x][y] = false;
-                }
-                else
-                {
-                    winnet[x][y] = true;
-                }                
-            }
         }
 
         for (x=0;x<rows;x++)        //this cycle is for seting up playing net, 9=mine, other numbers is number of mines near him
@@ -367,10 +313,7 @@ int main()
                 if (e.type == sf::Event::Closed)
                 {
                     game_window.close();
-//                    return 0;
-                    run=false;
-                    game=false;
-                    
+                    return 0;
                 }
                 if (e.type == sf::Event::MouseButtonPressed)
                 {
@@ -389,24 +332,21 @@ int main()
             }
 
             
-            if(r_click)
+            if((r_click) and (visnet[vx][vy]==false))
             {
-                if (visnet[vx][vy]==false)
+                if(not_click_net[vx][vy]==0)
                 {
-                    if(not_click_net[vx][vy]==0)
+                    not_click_net[vx][vy]++;
+                }
+                else                    
+                {
+                    if(not_click_net[vx][vy]==1)
                     {
                         not_click_net[vx][vy]++;
                     }
                     else
                     {
-                        if(not_click_net[vx][vy]==1)
-                        {
-                            not_click_net[vx][vy]++;
-                        }
-                        else
-                        {
-                            not_click_net[vx][vy]=0;
-                        }
+                        not_click_net[vx][vy]=0;
                     }
                 }
             }
@@ -429,69 +369,23 @@ int main()
                     waweq.pop();
                     x = p.x;
                     y = p.y;
-                    if (net[x-1][y-1]==0 && !visnet[x-1][y-1])
-                    {
-                        p.x = x-1;
-                        p.y = y-1;
-                        waweq.push(p);
-                    }
-                    visnet[x-1][y-1] = true;
 
-                    if (net[x][y-1]==0 && !visnet[x][y-1])
+                    for (int i=-1; i<2; i++)
                     {
-                        p.x = x;
-                        p.y = y-1;
-                        waweq.push(p);
-                    }
-                    visnet[x][y-1] = true;
+                        for (int j=-1; j<2 ; j++)
+                        {
+                            if ((i==0) and (j==0))
+                                continue;
 
-                    if (net[x+1][y-1]==0 && !visnet[x+1][y-1])
-                    {
-                        p.x = x+1;
-                        p.y = y-1;
-                        waweq.push(p);
+                            if (net[x+i][y+j]==0 && !visnet[x+i][y+j])
+                            {
+                                p.x = x+i;
+                                p.y = y+j;
+                                waweq.push(p);
+                            }
+                            visnet[x+i][y+j] = true;
+                        }
                     }
-                    visnet[x+1][y-1] = true;
-
-                    if (net[x-1][y]==0 && !visnet[x-1][y])
-                    {
-                        p.x = x-1;
-                        p.y = y;
-                        waweq.push(p);
-                    }
-                    visnet[x-1][y] = true;
-
-                    if (net[x+1][y]==0 && !visnet[x+1][y])
-                    {
-                        p.x = x+1;
-                        p.y = y;
-                        waweq.push(p);
-                    }
-                    visnet[x+1][y] = true;
-
-                    if (net[x-1][y+1]==0 && !visnet[x-1][y+1])
-                    {
-                        p.x = x-1;
-                        p.y = y+1;
-                        waweq.push(p);
-                    }
-                    visnet[x-1][y+1] = true;
-
-                    if (net[x][y+1]==0 && !visnet[x][y+1])
-                    {
-                        p.x = x;
-                        p.y = y+1;
-                        waweq.push(p);
-                    }
-                    visnet[x][y+1] = true;
-
-                    if (net[x+1][y+1]==0 && !visnet[x+1][y+1])
-                    {
-                        p.x = x+1;
-                        p.y = y+1;
-                        waweq.push(p);
-                    }
-                    visnet[x+1][y+1] = true;
                 }
             }
 
@@ -524,83 +418,21 @@ int main()
                     }
                     else
                     {
-                        if (net[x][y]==0)
+                        if(net[x][y]!=9)
                         {
-                            frame0.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                            game_window.draw(frame0);
+                            int j;
+                            j = net[x][y];
+                            frame[j].setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
+                            game_window.draw(frame[j]);
                         }
                         else
                         {
-                            if (net[x][y]==1)
+                            run=false;
+                            if (expl_reset)
                             {
-                                frame1.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                game_window.draw(frame1);
-                            }
-                            else
-                            {
-                                if (net[x][y]==2)
-                                {
-                                    frame2.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                    game_window.draw(frame2);
-                                }
-                                else
-                                {
-                                    if (net[x][y]==3)
-                                    {
-                                        frame3.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                        game_window.draw(frame3);
-                                    }
-                                    else
-                                    {
-                                        if (net[x][y]==4)
-                                        {
-                                            frame4.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                            game_window.draw(frame4);
-                                        }
-                                        else
-                                        {
-                                            if (net[x][y]==5)
-                                            {
-                                                frame5.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                                game_window.draw(frame5);
-                                            }
-                                            else
-                                            {
-                                                if (net[x][y]==6)
-                                                {
-                                                    frame6.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                                    game_window.draw(frame6);
-                                                }
-                                                else
-                                                {
-                                                    if (net[x][y]==7)
-                                                    {
-                                                        frame7.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                                        game_window.draw(frame7);
-                                                    }
-                                                    else
-                                                    {
-                                                        if (net[x][y]==8)
-                                                        {
-                                                            frame8.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                                            game_window.draw(frame8);
-                                                        }
-                                                        else
-                                                        {
-                                                            run=false;
-                                                            if (expl_reset)
-                                                            {
-                                                                explx=x;
-                                                                exply=y;
-                                                                expl_reset=false;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                explx=x;
+                                exply=y;
+                                expl_reset=false;
                             }
                         }
                     }
@@ -638,7 +470,7 @@ int main()
             game_window.display();
         }
 
-        bool end_game=false;
+        bool end_game=true;
         while (end_game)
         {
             sf::Event e;
@@ -652,131 +484,66 @@ int main()
                 }
 
             }
-            //if (win)
-            //{
-                for (x=1;x<rows-1;x++)
+            for (x=1;x<rows-1;x++)
+            {
+                for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
                 {
-                    for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
+                    if (visnet[x][y]==false)
                     {
-                        if (visnet[x][y]==false)
+                        if(not_click_net[x][y]==0)
                         {
-                            if(not_click_net[x][y]==0)
-                            {
-                                cowerd_frame.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                game_window.draw(cowerd_frame);
-                            }
-                            else
-                            {
-                                if(not_click_net[x][y]==1)
-                                {
-                                    if(winnet[x][y])
-                                    {
-                                        no_mine.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                        game_window.draw(no_mine);
-                                    }
-                                    else
-                                    {
-                                        flag_frame.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                        game_window.draw(flag_frame);
-                                    }
-                                }
-                                else
-                                {
-                                    cow_qm.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                    game_window.draw(cow_qm);
-                                }
-                            }
+                            cowerd_frame.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
+                            game_window.draw(cowerd_frame);
                         }
                         else
                         {
-                            if (net[x][y]==0)
+                            if(not_click_net[x][y]==1)
                             {
-                                frame0.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                game_window.draw(frame0);
-                            }
-                            else
-                            {
-                                if (net[x][y]==1)
+                                if(winnet[x][y])
                                 {
-                                    frame1.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                    game_window.draw(frame1);
+                                    no_mine.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
+                                    game_window.draw(no_mine);
                                 }
                                 else
                                 {
-                                    if (net[x][y]==2)
+                                    flag_frame.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
+                                    game_window.draw(flag_frame);
+                                }
+                            }
+                            else
+                            {
+                                cow_qm.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
+                                game_window.draw(cow_qm);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(net[x][y]!=9)
+                        {
+                            int j;
+                            j = net[x][y];
+                            frame[j].setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
+                            game_window.draw(frame[j]);
+                        }
+                        else
+                        {
+                            for (int i=1;i<rows-1;i++)
+                            {
+                                for (int j=1;j<cols-1;j++)
+                                {
+                                    if (net[i][j]==9)
                                     {
-                                        frame2.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                        game_window.draw(frame2);
-                                    }
-                                    else
-                                    {
-                                        if (net[x][y]==3)
+                                        if ((i==explx) and (j==exply))
                                         {
-                                            frame3.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                            game_window.draw(frame3);
+                                            expl_mine.setPosition(sf::Vector2f(explx*BLOCK, exply*BLOCK));
+                                            game_window.draw(expl_mine);
                                         }
                                         else
                                         {
-                                            if (net[x][y]==4)
-                                            {
-                                                frame4.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                                game_window.draw(frame4);
-                                            }
-                                            else
-                                            {
-                                                if (net[x][y]==5)
-                                                {
-                                                    frame5.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                                    game_window.draw(frame5);
-                                                }
-                                                else
-                                                {
-                                                    if (net[x][y]==6)
-                                                    {
-                                                        frame6.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                                        game_window.draw(frame6);
-                                                    }
-                                                    else
-                                                    {
-                                                        if (net[x][y]==7)
-                                                        {
-                                                            frame7.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                                            game_window.draw(frame7);
-                                                        }
-                                                        else
-                                                        {
-                                                            if (net[x][y]==8)
-                                                            {
-                                                                frame8.setPosition(sf::Vector2f(x*BLOCK, y*BLOCK));
-                                                                game_window.draw(frame8);
-                                                            }
-                                                            else
-                                                            {
-                                                                for (int i=1;i<rows-1;i++)
-                                                                {
-                                                                    for (int j=1;j<cols-1;j++)        
-                                                                    {
-                                                                        if (net[i][j]==9)
-                                                                        {
-                                                                            if ((i==explx) and (j==exply))
-                                                                            {
-                                                                                expl_mine.setPosition(sf::Vector2f(explx*BLOCK, exply*BLOCK));
-                                                                                game_window.draw(expl_mine);
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                visnet[i][j]=true;
-                                                                                mine.setPosition(sf::Vector2f(i*BLOCK, j*BLOCK));
-                                                                                game_window.draw(mine);
-                                                                            }                                                                        
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            visnet[i][j]=true;
+                                            mine.setPosition(sf::Vector2f(i*BLOCK, j*BLOCK));
+                                            game_window.draw(mine);
                                         }
                                     }
                                 }
@@ -784,63 +551,10 @@ int main()
                         }
                     }
                 }
-            //}
+            }
             game_window.display();
             game_window.clear();
         }
-
-
-            for (x=1;x<rows-1;x++)
-            {
-                for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
-                {
-                    if(visnet[x][y])
-                    {
-                        cout << "O ";
-                    }
-                    else
-                    {
-                        cout << "X ";
-                    }
-                }
-                cout << endl;
-            }
-
-                cout << endl;
-                cout << endl;
-            for (x=1;x<rows-1;x++)
-            {
-                for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
-                {
-                    if(flag_net[x][y])
-                    {
-                        cout << "O ";
-                    }
-                    else
-                    {
-                        cout << "X ";
-                    }
-                }
-                cout << endl;
-            }
-            
-                cout << endl;
-                cout << endl;
-            for (x=1;x<rows-1;x++)
-            {
-                for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
-                {
-                    if(winnet[x][y])
-                    {
-                        cout << "O ";
-                    }
-                    else
-                    {
-                        cout << "X ";
-                    }
-                }
-                cout << endl;
-            }
     }
 
     return 0;       //return to int main number 0
