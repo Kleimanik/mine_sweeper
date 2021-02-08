@@ -1,15 +1,11 @@
 #include <iostream>  //iostream is library for command cout and cin
 #include <string>    // -//- for type of variable string
-#include <fstream>   // -//- for commands ifstream(r14.)/ofstream and for work with stream
-#include <sstream>   // -//- for command stringstream r20.
 #include <queue>
 #include <cstdlib>
 #include <time.h>
 #include <SFML/Graphics.hpp>    // library for graphic from sfml
 
 using namespace std;    //std is for commands cin/cout here i declaret to use it every time or if I do`t, I can use it separate in program
-
-
 
 struct Point
 {
@@ -283,8 +279,8 @@ int main()
 
 
         game_window.setSize(sf::Vector2u(rows*BLOCK, cols*BLOCK));      // Ask Chiko !!!
-        sf::FloatRect visibleArea(0, 0, rows*BLOCK, cols*BLOCK);
-        game_window.setView(sf::View(visibleArea));                     // Ask Chiko !!!
+        sf::FloatRect visible_area(0, 0, rows*BLOCK, cols*BLOCK);
+        game_window.setView(sf::View(visible_area));                     // Ask Chiko !!!
 
         bool run=true;
         int explx=0, exply=0;
@@ -466,17 +462,28 @@ int main()
         bool end_game=true;
         while (end_game)
         {
+            bool l_click = false;
+            int mx,my;
             sf::Event e;
             while(game_window.pollEvent(e))
             {
                 sf::Vector2i mpos = sf::Mouse::getPosition(game_window);
+                mx = mpos.x;
+                my = mpos.y;
                 if (e.type == sf::Event::Closed)
                 {
                     game_window.close();
                     return 0;
                 }
-
+                if (e.type == sf::Event::MouseButtonPressed)
+                {
+                    if (e.mouseButton.button == sf::Mouse::Left)
+                    {
+                        l_click = true;
+                    }
+                }
             }
+
             for (x=1;x<rows-1;x++)
             {
                 for (y=1;y<cols-1;y++)        //this cycle is to write out net and on places of mine it says O on other place it will be X
@@ -543,6 +550,13 @@ int main()
                             }
                         }
                     }
+                }
+            }
+            if (l_click)
+            {
+                if(mx<BLOCK && my<BLOCK)
+                {
+                    end_game = false;
                 }
             }
             game_window.display();
