@@ -52,6 +52,11 @@ int main()
     {
         std::cout << "Error texture load8." << std::endl;
     }
+    sf::Texture t_repeat_button;
+    if (!t_repeat_button.loadFromFile("repeat_button.png"))
+    {
+        std::cout << "Error texture load9." << std::endl;
+    }
 
     sf::Sprite s_home_screen, s_dfct[6];
     s_home_screen.setTexture(t_home_screen);
@@ -70,7 +75,7 @@ int main()
         frame[i].setTextureRect(sf::IntRect(i*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
     }
 
-    sf::Sprite cowerd_frame, flag_frame, expl_mine, no_mine, mine, cow_qm, uncow_qm;
+    sf::Sprite cowerd_frame, flag_frame, expl_mine, no_mine, mine, cow_qm, uncow_qm, repeat_button;
     cowerd_frame.setTexture(texture);
     cowerd_frame.setTextureRect(sf::IntRect(0*BLOCK, 1*BLOCK, 1*BLOCK, 1*BLOCK));
     flag_frame.setTexture(texture);
@@ -85,6 +90,8 @@ int main()
     cow_qm.setTextureRect(sf::IntRect(5*BLOCK, 1*BLOCK, 1*BLOCK, 1*BLOCK));
     uncow_qm.setTexture(texture);
     uncow_qm.setTextureRect(sf::IntRect(6*BLOCK, 1*BLOCK, 1*BLOCK, 1*BLOCK));
+    repeat_button.setTexture(t_repeat_button);
+    repeat_button.setTextureRect(sf::IntRect(0*BLOCK, 0*BLOCK, 1*BLOCK, 1*BLOCK));
 
     bool game=true;
     while (game)
@@ -483,6 +490,9 @@ int main()
                     }
                 }
             }
+
+            repeat_button.setPosition(sf::Vector2f(0*BLOCK, 0*BLOCK));
+            game_window.draw(repeat_button);
 
             for (x=1;x<rows-1;x++)
             {
